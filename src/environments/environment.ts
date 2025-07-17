@@ -11,6 +11,6 @@ const getApiUrl = () => {
 
 export const environment = {
   production: false,
-  apiUrl: `${getApiUrl()}/api`,
-  baseUrl: getApiUrl(),
+  apiUrl: `${process.env['API_URL'] || 'http://localhost:8080/api'}`,
+  baseUrl: `${process.env['API_URL'] || 'http://localhost:8080'}`,
 };
