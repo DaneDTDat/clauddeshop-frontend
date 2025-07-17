@@ -12,10 +12,10 @@
   status = 200
 
 [context.production.environment]
-  API_URL = "https://your-railway-app.railway.app"
+  API_URL = "https://clauddeshop-backend-production.up.railway.app"
 
 [context.deploy-preview.environment]
-  API_URL = "https://your-railway-app.railway.app"
+  API_URL = "https://clauddeshop-backend-production.up.railway.appp"
 
 [[headers]]
   for = "/*"
