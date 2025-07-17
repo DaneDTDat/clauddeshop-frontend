@@ -11,6 +11,6 @@ const getApiUrl = () => {
 
 export const environment = {
   production: false,
-  apiUrl: `${process.env['API_URL'] || 'http://localhost:8080/api'}`,
-  baseUrl: `${process.env['API_URL'] || 'http://localhost:8080'}`,
+  apiUrl: `https://clauddeshop-backend-production.up.railway.app/0/api`,
+  baseUrl: `https://clauddeshop-backend-production.up.railway.app/`,
 };
