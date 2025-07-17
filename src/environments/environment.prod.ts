@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://your-railway-app.railway.app/api',
-  baseUrl: 'https://your-railway-app.railway.app'
+  apiUrl: `${process.env['API_URL'] || 'http://localhost:8080/api'}`,
+  baseUrl: `${process.env['API_URL'] || 'http://localhost:8080'}`,
 };
