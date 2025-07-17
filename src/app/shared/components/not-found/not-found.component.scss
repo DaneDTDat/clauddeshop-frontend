@@ -1,0 +1,72 @@
+:host {
+  // Color Palette
+  --primary: #d180ac;
+  --primary-light: rgba(209, 128, 172, 0.1);
+  --primary-dark: #b86b95;
+  --secondary: #80d1ac;
+
+  // Typography
+  --text-primary: #2c3e50;
+  --text-secondary: #7f8c8d;
+
+  // Background & Surface
+  --background: #f0f4f8;
+  --surface: #ffffff;
+
+  // Glassmorphism Effect
+  --glass-bg: rgba(255, 255, 255, 0.5);
+  --glass-bg-hover: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.2);
+
+  // UI States & Accents
+  --border-color: #e0e6ed;
+  --shadow: rgba(44, 62, 80, 0.1);
+  --success: #27ae60;
+  --warning: #f39c12;
+  --error: #c0392b;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: var(--background);
+  text-align: center;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+
+  &.btn-primary {
+    background-color: var(--primary);
+    color: white;
+
+    &:hover {
+      background-color: var(--primary-dark);
+      box-shadow: 0 8px 16px rgba(209, 128, 172, 0.3);
+      transform: translateY(-2px);
+    }
+  }
+}

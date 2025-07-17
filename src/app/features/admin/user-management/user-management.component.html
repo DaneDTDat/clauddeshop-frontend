@@ -1,0 +1,177 @@
+<div class="container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">User Management</h1>
+      <p class="page-subtitle">Manage all users, their roles, and account status.</p>
+    </div>
+  </div>
+
+  <div class="glass-section content-section">
+    <!-- Toolbar: Search and Filters -->
+    <div class="toolbar">
+      <div class="search-bar">
+        <i class="fas fa-search search-icon"></i>
+        <input 
+          type="text" 
+          id="search" 
+          [(ngModel)]="searchTerm" 
+          (input)="onSearchChange()"
+          placeholder="Search by name or email..."
+        >
+      </div>
+      <div class="filters">
+        <select id="roleFilter" [(ngModel)]="selectedRole" (change)="onFilterChange()">
+          <option value="">All Roles</option>
+          <option value="customer">Customer</option>
+          <option value="shop_owner">Shop Owner</option>
+          <option value="admin">Admin</option>
+        </select>
+        <select id="statusFilter" [(ngModel)]="selectedStatus" (change)="onFilterChange()">
+          <option value="">All Statuses</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+        <button class="btn btn-secondary btn-clear" (click)="clearFilters()" *ngIf="searchTerm || selectedRole || selectedStatus">
+          <i class="fas fa-times"></i> Clear
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content: Table or Loading/Empty States -->
+    <div class="table-wrapper">
+      <ng-container *ngIf="!loading; else loadingState">
+        <ng-container *ngIf="users.length > 0; else emptyState">
+          <table class="users-table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Joined On</th>
+                <!-- <th class="actions-header">Actions</th> -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users">
+                <td class="user-cell">
+                  <div class="user-avatar">{{ getUserInitials(user) }}</div>
+                  <div class="user-info">
+                    <span class="name">{{ user.first_name }} {{ user.last_name }}</span>
+                    <span class="email">{{ user.email }}</span>
+                  </div>
+                </td>
+                <td>
+                  <select 
+                    [value]="user.role" 
+                    (change)="updateUserRole(user, $event)"
+                    class="role-select"
+                    [disabled]="updatingUsers.has(user.id) || isCurrentUser(user.id)"
+                    [title]="isCurrentUser(user.id) ? 'Cannot change your own role' : 'Change role'"
+                  >
+                    <option value="customer">Customer</option>
+                    <option value="shop_owner">Shop Owner</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </td>
+                <td>
+                  <span style="cursor: pointer" (click)="toggleUserStatus(user)" class="status-badge" [ngClass]="user.is_active ? 'status-active' : 'status-inactive'">
+                    <i class="fas fa-circle status-icon"></i>
+                    {{ user.is_active ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+                <td>{{ user.created_at | date:'mediumDate' }}</td>
+                <!-- <td class="actions-cell">
+                  <button 
+                    class="btn btn-icon btn-primary"
+                    [ngClass]="user.is_active ? 'btn-warning' : 'btn-success'"
+                    [disabled]="updatingUsers.has(user.id) || isCurrentUser(user.id)"
+                    [title]="isCurrentUser(user.id) ? 'Cannot change your own status' : (user.is_active ? 'Deactivate User' : 'Activate User')"
+                    (click)="toggleUserStatus(user)"
+                  > switch
+                  </button>
+                  <button 
+                    class="btn btn-icon btn-info"
+                    title="View user details"
+                    (click)="viewUserDetails(user)"
+                  >
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </td> -->
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+      </ng-container>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-controls" *ngIf="!loading && pagination.total > pagination.limit">
+      <span class="results-info">
+        Showing {{ ((pagination.page - 1) * pagination.limit) + 1 }} - {{ Math.min(pagination.page * pagination.limit, pagination.total) }} of {{ pagination.total }} users
+      </span>
+      <div class="buttons">
+        <button (click)="changePage(pagination.page - 1)" [disabled]="pagination.page <= 1" class="btn btn-secondary">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button (click)="changePage(pagination.page + 1)" [disabled]="pagination.page >= totalPages()" class="btn btn-secondary">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading State Template -->
+<ng-template #loadingState>
+  <div class="state-container loading-container">
+    <div class="spinner"></div>
+    <p>Loading users...</p>
+  </div>
+</ng-template>
+
+<!-- Empty State Template -->
+<ng-template #emptyState>
+  <div class="state-container empty-container">
+    <i class="fas fa-users-slash empty-icon"></i>
+    <h3>No Users Found</h3>
+    <p>No users match your current filters. Try adjusting your search.</p>
+    <button (click)="clearFilters()" class="btn btn-primary">
+      Clear All Filters
+    </button>
+  </div>
+</ng-template>
+
+<!-- User Details Modal -->
+<div class="modal-overlay" *ngIf="selectedUser" (click)="closeModal()">
+  <div class="modal-content glass-section" (click)="$event.stopPropagation()" *ngIf="selectedUser">
+    <div class="modal-header">
+      <div class="user-avatar-large">{{ getUserInitials(selectedUser) }}</div>
+      <div class="user-header-info">
+        <h3 class="modal-title">{{ selectedUser.first_name }} {{ selectedUser.last_name }}</h3>
+        <p class="email">{{ selectedUser.email }}</p>
+      </div>
+      <button class="close-btn" (click)="closeModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-grid">
+        <div class="detail-item">
+          <span class="label"><i class="fas fa-user-shield"></i> Role</span>
+          <span class="value status-badge" [ngClass]="'role-' + selectedUser.role">{{ selectedUser.role | titlecase }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label"><i class="fas fa-toggle-on"></i> Status</span>
+          <span class="value status-badge" [ngClass]="selectedUser.is_active ? 'status-active' : 'status-inactive'">{{ selectedUser.is_active ? 'Active' : 'Inactive' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label"><i class="fas fa-calendar-alt"></i> Joined</span>
+          <span class="value">{{ selectedUser.created_at | date:'fullDate' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label"><i class="fas fa-history"></i> Last Update</span>
+          <span class="value">{{ selectedUser.updated_at | date:'fullDate' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

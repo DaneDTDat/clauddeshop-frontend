@@ -1,0 +1,58 @@
+<div class="cart-container">
+  <h1 class="page-title">Shopping Cart</h1>
+
+  <ng-container *ngIf="cart$ | async as cart">
+    <div *ngIf="cart.items && cart.items.length > 0; else emptyCart">
+      <div class="cart-layout">
+        <div class="cart-items-list">
+          <div *ngFor="let item of cart.items" class="cart-item">
+            <div class="item-image">
+              <img [src]="item.product.image_url | fullImageUrl" [alt]="item.product.name">
+            </div>
+            <div class="item-details">
+              <h3 class="item-name">{{ item.product.name }}</h3>
+              <p class="item-price">{{ item.product.price | currency:'USD' }}</p>
+            </div>
+            <div class="item-actions">
+              <div class="quantity-control">
+                <button (click)="updateQuantity(item, item.quantity - 1)" class="quantity-btn">-</button>
+                <span class="quantity-value">{{ item.quantity }}</span>
+                <button (click)="updateQuantity(item, item.quantity + 1)" class="quantity-btn">+</button>
+              </div>
+              <button (click)="removeFromCart(item)" class="remove-btn">Remove</button>
+            </div>
+            <div class="item-total">
+              <p>{{ (item.product.price * item.quantity) | currency:'USD' }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cart-summary">
+          <h2 class="summary-title">Order Summary</h2>
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span>{{ calculateSubtotal(cart) | currency:'USD' }}</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span>FREE</span>
+          </div>
+          <hr class="summary-divider">
+          <div class="summary-row total">
+            <span>Total</span>
+            <span>{{ calculateSubtotal(cart) | currency:'USD' }}</span>
+          </div>
+          <button class="checkout-btn" routerLink="/checkout">Proceed to Checkout</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #emptyCart>
+    <div class="empty-cart-message">
+      <h2>Your cart is empty</h2>
+      <p>Looks like you haven't added anything to your cart yet.</p>
+      <a routerLink="/products" class="browse-products-btn">Browse Products</a>
+    </div>
+  </ng-template>
+</div>

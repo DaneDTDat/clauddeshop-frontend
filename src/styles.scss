@@ -1,0 +1,410 @@
+/* ClaudeShop Global Styles - Glassmorphism Design */
+
+// Color Palette
+:root {
+  --primary-light: #E4D6DA;
+  --primary-medium: #BD99A2;
+  --primary-dark: #8F788D;
+  --accent: #D180AC;
+  
+  // Glassmorphism variables
+  --glass-bg: rgba(228, 214, 218, 0.25);
+  --glass-bg-hover: rgba(228, 214, 218, 0.35);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  --glass-backdrop: blur(8px);
+  
+  // Text colors
+  --text-primary: #2c2c2c;
+  --text-secondary: #666666;
+  --text-light: #ffffff;
+  
+  // Status colors
+  --success: #4caf50;
+  --warning: #ff9800;
+  --error: #f44336;
+  --info: #2196f3;
+}
+
+// Reset and base styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-medium) 50%, rgba(189, 153, 162, 0.7) 100%);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+// Glassmorphism base class
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-backdrop);
+  -webkit-backdrop-filter: var(--glass-backdrop);
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    background: var(--glass-bg-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.45);
+  }
+}
+
+// Enhanced glass variants
+.glass-card {
+  @extend .glass;
+  padding: 24px;
+  margin: 16px 0;
+}
+
+.glass-header {
+  @extend .glass;
+  padding: 16px 24px;
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-sidebar {
+  @extend .glass;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 20px 0 0 20px;
+}
+
+// Button styles
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  
+  &.btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--primary-medium));
+    color: var(--text-light);
+    box-shadow: 0 4px 16px rgba(209, 128, 172, 0.4);
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(209, 128, 172, 0.6);
+    }
+  }
+  
+  &.btn-secondary {
+    margin: 3px;
+    @extend .glass;
+    color: var(--text-primary);
+    
+    &:hover {
+      background: var(--glass-bg-hover);
+    }
+  }
+  
+  &.btn-outline {
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    
+    &:hover {
+      background: var(--accent);
+      color: var(--text-light);
+    }
+  }
+}
+
+// Form styles
+.form-group {
+  margin-bottom: 20px;
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  
+  input, textarea, select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-backdrop);
+    -webkit-backdrop-filter: var(--glass-backdrop);
+    color: var(--text-primary);
+    font-size: 14px;
+    transition: all 0.3s ease;
+    
+    &:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(209, 128, 172, 0.2);
+      background: var(--glass-bg-hover);
+    }
+    
+    &::placeholder {
+      color: var(--text-secondary);
+    }
+  }
+  
+  textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+}
+
+// Card styles
+.card {
+  @extend .glass-card;
+  
+  .card-header {
+    margin: -24px -24px 20px -24px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--glass-border);
+    border-radius: 16px 16px 0 0;
+    background: rgba(255, 255, 255, 0.1);
+    
+    h2, h3 {
+      margin: 0;
+      color: var(--text-primary);
+    }
+  }
+  
+  .card-body {
+    padding: 0;
+  }
+  
+  .card-footer {
+    margin: 20px -24px -24px -24px;
+    padding: 20px 24px;
+    border-top: 1px solid var(--glass-border);
+    border-radius: 0 0 16px 16px;
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+// Navigation styles
+.nav {
+  display: flex;
+  list-style: none;
+  gap: 8px;
+  
+  .nav-item {
+    .nav-link {
+      padding: 8px 16px;
+      border-radius: 8px;
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      
+      &:hover, &.active {
+        background: var(--glass-bg);
+        color: var(--accent);
+      }
+    }
+  }
+}
+
+// Table styles
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--glass-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  
+  th, td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  
+  th {
+    background: rgba(255, 255, 255, 0.1);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  
+  tr:hover {
+    background: var(--glass-bg-hover);
+  }
+}
+
+// Badge styles
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  
+  &.badge-success {
+    background: var(--success);
+    color: white;
+  }
+  
+  &.badge-warning {
+    background: var(--warning);
+    color: white;
+  }
+  
+  &.badge-error {
+    background: var(--error);
+    color: white;
+  }
+  
+  &.badge-info {
+    background: var(--info);
+    color: white;
+  }
+}
+
+// Utility classes
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 16px; }
+.mt-3 { margin-top: 24px; }
+.mt-4 { margin-top: 32px; }
+
+.mb-1 { margin-bottom: 8px; }
+.mb-2 { margin-bottom: 16px; }
+.mb-3 { margin-bottom: 24px; }
+.mb-4 { margin-bottom: 32px; }
+
+.p-1 { padding: 8px; }
+.p-2 { padding: 16px; }
+.p-3 { padding: 24px; }
+.p-4 { padding: 32px; }
+
+.d-flex { display: flex; }
+.align-items-center { align-items: center; }
+.justify-content-between { justify-content: space-between; }
+.justify-content-center { justify-content: center; }
+.gap-1 { gap: 8px; }
+.gap-2 { gap: 16px; }
+.gap-3 { gap: 24px; }
+
+.w-100 { width: 100%; }
+.h-100 { height: 100%; }
+
+// Responsive design
+@media (max-width: 768px) {
+  .glass-card {
+    margin: 8px;
+    padding: 16px;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    padding: 10px 14px;
+  }
+}
+
+// Loading spinner
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--glass-border);
+  border-top: 4px solid var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Fade in animation
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// Slide in animation
+.slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+// Error and success messages
+.alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  
+  &.alert-success {
+    background: rgba(76, 175, 80, 0.1);
+    border: 1px solid var(--success);
+    color: var(--success);
+  }
+  
+  &.alert-error {
+    background: rgba(244, 67, 54, 0.1);
+    border: 1px solid var(--error);
+    color: var(--error);
+  }
+  
+  &.alert-warning {
+    background: rgba(255, 152, 0, 0.1);
+    border: 1px solid var(--warning);
+    color: var(--warning);
+  }
+  
+  &.alert-info {
+    background: rgba(33, 150, 243, 0.1);
+    border: 1px solid var(--info);
+    color: var(--info);
+  }
+}
+
+// Custom scrollbar
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--glass-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-medium);
+}

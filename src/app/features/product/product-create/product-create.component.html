@@ -1,0 +1,79 @@
+<div class="profile-container">
+  <div class="page-header">
+    <h1 class="page-title">Create New Product</h1>
+    <p class="page-subtitle">Fill out the form below to add a new product to your shop.</p>
+  </div>
+  <div class="glass">
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="profile-form">
+      <div class="form-group">
+        <label for="shop_id" class="form-label">Shop</label>
+        <select id="shop_id" formControlName="shop_id" class="form-select">
+          <option [ngValue]="null" disabled>Select a shop</option>
+          <option *ngFor="let shop of shops$ | async" [value]=shop.id>{{ shop.name }}</option>
+        </select>
+        <div *ngIf="f['shop_id'].touched && f['shop_id'].errors" class="error-message">
+          <div *ngIf="f['shop_id'].errors['required']">Please select a shop.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="name" class="form-label">Product Name</label>
+        <input type="text" id="name" formControlName="name" class="form-input">
+        <div *ngIf="f['name'].touched && f['name'].errors" class="error-message">
+          <div *ngIf="f['name'].errors['required']">Product name is required.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="category" class="form-label">Category</label>
+        <input type="text" id="category" formControlName="category" class="form-input">
+        <div *ngIf="f['category'].touched && f['category'].errors" class="error-message">
+          <div *ngIf="f['category'].errors['required']">Category is required.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="price" class="form-label">Price</label>
+        <input type="number" id="price" formControlName="price" class="form-input">
+        <div *ngIf="f['price'].touched && f['price'].errors" class="error-message">
+          <div *ngIf="f['price'].errors['required']">Price is required.</div>
+          <div *ngIf="f['price'].errors['min']">Price must be a positive number.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="stock" class="form-label">Stock</label>
+        <input type="number" id="stock" formControlName="stock" class="form-input">
+        <div *ngIf="f['stock'].touched && f['stock'].errors" class="error-message">
+          <div *ngIf="f['stock'].errors['required']">Stock quantity is required.</div>
+          <div *ngIf="f['stock'].errors['min']">Stock must be a positive number.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description" class="form-label">Description</label>
+        <textarea id="description" formControlName="description" class="form-input" rows="3"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Image</label>
+        <div class="flex items-center">
+          <input type="text" formControlName="image_url" class="form-input rounded-r-none" readonly placeholder="Select an image">
+          <button type="button" class="btn-secondary rounded-l-none" (click)="fileInput.click()">Choose File</button>
+          <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept="image/*">
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message-box">
+        {{ errorMessage }}
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="submit-btn" [disabled]="productForm.invalid || isLoading">
+          <span *ngIf="isLoading" class="spinner"></span>
+          {{ isLoading ? 'Creating...' : 'Create Product' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

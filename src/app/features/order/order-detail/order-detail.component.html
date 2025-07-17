@@ -1,0 +1,44 @@
+<div class="order-detail-container" *ngIf="order$ | async as order; else loading">
+  <div class="order-header">
+    <h1 class="page-title">Order #{{ order.id }}</h1>
+    <span class="order-status status-{{ order.status.toLowerCase() }}">{{ order.status }}</span>
+  </div>
+
+  <div class="order-summary-section glass">
+    <h2 class="section-title">Order Summary</h2>
+    <div class="summary-grid">
+      <div><strong>Order Date:</strong> {{ order.created_at | date:'medium' }}</div>
+      <div><strong>Order Total:</strong> {{ calculateOrderTotal(order) | currency:'USD' }}</div>
+      <div><strong>Shipping Address:</strong> {{ order.shipping_address }}</div>
+    </div>
+  </div>
+
+  <div class="order-items-section glass">
+    <h2 class="section-title">Items in this Order</h2>
+    <div class="items-list">
+      <div *ngFor="let item of order.items" class="item-card">
+        <div class="item-image">
+          <img [src]="getImageUrl(item.product.image_url)" [alt]="item.product.name">
+        </div>
+        <div class="item-details">
+          <h3 class="item-name">{{ item.product.name }}</h3>
+          <p class="item-meta">Price: {{ item.price | currency:'USD' }}</p>
+          <p class="item-meta">Quantity: {{ item.quantity }}</p>
+        </div>
+        <div class="item-total">
+          {{ (item.price * item.quantity) | currency:'USD' }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <a routerLink="/orders" class="btn btn-secondary">Back to Orders</a>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="loading-state">
+    <p>Loading order details...</p>
+  </div>
+</ng-template>

@@ -1,0 +1,59 @@
+<div class="container">
+  <div *ngIf="isLoading" class="spinner-container">
+    <div class="spinner" role="status"></div>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message-box">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="product && !isLoading">
+    <div class="page-header">
+      <h1 class="page-title">{{ product.name }}</h1>
+      <p class="page-subtitle">From <a [routerLink]="['/shops', product.shop_id]">{{ product.shop?.name }}</a></p>
+    </div>
+
+    <div class="glass-section">
+      <div class="product-layout">
+        <div class="product-image">
+          <img [src]="product.image_url | fullImageUrl" alt="{{ product.name }}">
+        </div>
+        <div class="product-details">
+          <div class="detail-item">
+            <strong>Description:</strong>
+            <span>{{ product.description }}</span>
+          </div>
+          <div class="detail-item">
+            <strong>Category:</strong>
+            <span>{{ product.category | titlecase }}</span>
+          </div>
+          <div class="detail-item">
+            <strong>Price:</strong>
+            <span>{{ product.price | currency:'USD' }}</span>
+          </div>
+          <div class="detail-item">
+            <strong>Stock:</strong>
+            <span>{{ product.stock }} units available</span>
+          </div>
+          <div class="detail-item">
+            <strong>Status:</strong>
+            <span>
+              <span class="status-badge" [ngClass]="'status-' + product.status">
+                {{ product.status | titlecase }}
+              </span>
+            </span>
+          </div>
+          <div class="detail-item">
+            <strong>Last updated:</strong>
+            <span>{{ product.updated_at | date:'medium' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="isOwner" class="shop-actions">
+        <a [routerLink]="['/products', product.id, 'edit']" class="btn btn-primary">Edit</a>
+                <button (click)="deleteProduct()" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

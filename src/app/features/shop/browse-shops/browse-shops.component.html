@@ -1,0 +1,30 @@
+<div class="browse-shops-container">
+  <div class="page-header">
+    <h1>Browse Shops</h1>
+    <p>Discover our collection of unique shops</p>
+  </div>
+
+  <div class="shops-list" *ngIf="shops$ | async as shops; else loading">
+    <div *ngFor="let shop of shops" class="shop-list-item glass">
+      <div class="shop-item-image">
+        <img [src]="'/assets/images/shop-placeholder-' + (shop.id % 5) + '.png'" [alt]="shop.name">
+      </div>
+      <div class="shop-item-details">
+        <h3 class="shop-name">{{ shop.name }}</h3>
+        <p class="shop-description">{{ shop.description }}</p>
+      </div>
+      <div class="shop-item-actions">
+        <a [routerLink]="['/shops', shop.id, 'products']" class="btn btn-primary">View Products</a>
+      </div>
+    </div>
+    <div *ngIf="shops.length === 0" class="empty-state">
+      <p>No shops available at the moment. Please check back later.</p>
+    </div>
+  </div>
+
+  <ng-template #loading>
+    <div class="loading-state">
+      <p>Loading shops...</p>
+    </div>
+  </ng-template>
+</div>

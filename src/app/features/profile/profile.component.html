@@ -1,0 +1,213 @@
+<div class="container">
+  <div class="profile-header">
+    <h1 class="page-title">Profile Settings</h1>
+    <p class="page-subtitle">Manage your account information and preferences</p>
+  </div>
+
+  <div class="profile-content">
+    <div class="profile-card glass-section">
+      <div class="profile-avatar-section">
+        <div class="profile-avatar">
+          {{ getUserInitials() }}
+        </div>
+        <div class="avatar-info">
+          <h3 class="user-name">{{ currentUser?.first_name }} {{ currentUser?.last_name }}</h3>
+          <p class="user-email">{{ currentUser?.email }}</p>
+          <span class="user-role-badge">{{ currentUser?.role | titlecase }}</span>
+        </div>
+      </div>
+
+      <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+        <div class="form-section">
+          <h4 class="section-title">Personal Information</h4>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input
+                id="firstName"
+                type="text"
+                formControlName="firstName"
+                [class.error]="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched"
+              />
+              <div *ngIf="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched" class="error-message">
+                <span *ngIf="profileForm.get('firstName')?.errors?.['required']">First name is required</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input
+                id="lastName"
+                type="text"
+                formControlName="lastName"
+                [class.error]="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched"
+              />
+              <div *ngIf="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched" class="error-message">
+                <span *ngIf="profileForm.get('lastName')?.errors?.['required']">Last name is required</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              [class.error]="profileForm.get('email')?.invalid && profileForm.get('email')?.touched"
+            />
+            <div *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched" class="error-message">
+              <span *ngIf="profileForm.get('email')?.errors?.['required']">Email is required</span>
+              <span *ngIf="profileForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4 class="section-title">Change Password</h4>
+          
+          <div class="form-group">
+            <label for="currentPassword">Current Password</label>
+            <input
+              id="currentPassword"
+              type="password"
+              formControlName="currentPassword"
+              placeholder="Enter your current password"
+            />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="newPassword">New Password</label>
+              <input
+                id="newPassword"
+                type="password"
+                formControlName="newPassword"
+                placeholder="Enter a new password"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirm New Password</label>
+              <input
+                id="confirmPassword"
+                type="password"
+                formControlName="confirmPassword"
+                placeholder="Confirm your new password"
+              />
+            </div>
+          </div>
+          <div *ngIf="profileForm.hasError('passwordMismatch') && profileForm.get('confirmPassword')?.touched" class="error-message">
+            New passwords do not match.
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid || (loadingService.isLoading$ | async)">
+            <span *ngIf="!(loadingService.isLoading$ | async)">Save Changes</span>
+            <span *ngIf="(loadingService.isLoading$ | async)" class="spinner"></span>
+          </button>
+        </div>
+
+        <div *ngIf="successMessage" class="success-message-box">
+          {{ successMessage }}
+        </div>
+        <div *ngIf="errorMessage" class="error-message-box">
+          {{ errorMessage }}
+        </div>
+      </form>
+    </div>
+
+    <div class="stats-card glass-section">
+      <!-- Shop Owner / Admin View -->
+      <div *ngIf="!isCustomer">
+        <h4 class="section-title">Account Overview</h4>
+        <br>
+        <p class="section-subtitle">Your activity at a glance</p>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-icon">🛍️</div>
+            <div class="stat-content">
+              <div class="stat-value">{{ accountStats.shops }}</div>
+              <div class="stat-label">Shops</div>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon">📦</div>
+            <div class="stat-content">
+              <div class="stat-value">{{ accountStats.products }}</div>
+              <div class="stat-label">Products Listed</div>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon">💰</div>
+            <div class="stat-content">
+              <div class="stat-value">{{ accountStats.revenue | currency:'USD' }}</div>
+              <div class="stat-label">Total Revenue</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customer View -->
+      <div *ngIf="isCustomer">
+        <h4 class="section-title">Order Summary</h4>
+        <br>
+        <p class="section-subtitle">Your purchasing activity</p>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-icon">🛒</div>
+            <div class="stat-content">
+              <div class="stat-value">{{ customerStats.totalOrders }}</div>
+              <div class="stat-label">Total Orders</div>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-content">
+              <div class="stat-value">{{ customerStats.pending }}</div>
+              <div class="stat-label">Pending</div>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon">✅</div>
+            <div class="stat-content">
+              <div class="stat-value">{{ customerStats.completed }}</div>
+              <div class="stat-label">Completed</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="recent-orders">
+          <h4 class="section-title">Recent Orders</h4>
+          <div *ngIf="recentOrders$ | async as orders; else loadingOrders">
+            <ul *ngIf="orders.length > 0; else noOrders" class="order-list">
+              <li *ngFor="let order of orders" class="order-item glass-subtle">
+                <div class="order-info">
+                  <p class="order-id">Order #{{ order.id }}</p>
+                  <p class="order-date">{{ order.created_at | date:'medium' }}</p>
+                </div>
+                <div class="order-details">
+                  <p class="order-total">{{ order.total | currency:'USD' }}</p>
+                  <span class="order-status-badge status-{{ order.status }}">{{ order.status | titlecase }}</span>
+                  <a [routerLink]="['/orders', order.id]" class="btn btn-sm btn-secondary">View</a>
+                </div>
+              </li>
+            </ul>
+            <ng-template #noOrders>
+              <p class="empty-state">You have no recent orders.</p>
+            </ng-template>
+          </div>
+          <ng-template #loadingOrders>
+            <p class="loading-state">Loading recent orders...</p>
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="member-since">
+        Member since {{ getMemberSince() }}
+      </div>
+    </div>
+  </div>
+</div>

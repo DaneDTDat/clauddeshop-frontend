@@ -1,0 +1,78 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <div class="header-content">
+      <h1 class="page-title">My Shops</h1>
+      <p class="page-subtitle">Manage your shops and track their performance</p>
+    </div>
+    <div class="header-actions">
+      <button routerLink="/shops/create" class="btn btn-primary">
+        <span class="btn-icon">+</span>
+        Create New Shop
+      </button>
+    </div>
+  </div>
+
+  <div class="shops-list" *ngIf="(shops$ | async) as shops; else noShops">
+    <div *ngFor="let shop of shops; trackBy: trackByShop" class="shop-list-item glass">
+      <div class="shop-item-image">
+        <img [src]="'/assets/images/shop-placeholder-' + (shop.id % 5) + '.png'" [alt]="shop.name">
+      </div>
+
+      <div class="shop-item-details">
+        <div class="details-header">
+          <h3 class="shop-name">{{ shop.name }}</h3>
+          <span class="status-badge" [class]="'status-' + shop.status">
+            {{ shop.status | titlecase }}
+          </span>
+        </div>
+        <p class="shop-description">{{ shop.description }}</p>
+        <div class="shop-stats">
+          <div class="stat-item">
+            <span class="stat-icon">📦</span>
+            <span class="stat-value">{{ shop.products?.length || 0 }} Products</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-icon">💰</span>
+            <span class="stat-value">{{ (shop.revenue || 0) | currency }} Revenue</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-icon">👥</span>
+            <span class="stat-value">{{ shop.customerCount || 0 }} Customers</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="shop-item-actions">
+        <button [routerLink]="['/shops', shop.id, 'edit']" class="btn btn-secondary">
+          <span class="btn-icon">✏️</span> Edit
+        </button>
+        <button [routerLink]="['/shops', shop.id, 'products']" class="btn btn-secondary">
+          <span class="btn-icon">📦</span> View Products
+        </button>
+         <button (click)="deleteShop(shop)" class="btn btn-secondary" 
+                    [disabled]="loadingService.isLoading$ | async">
+              <span class="btn-icon">🗑️</span>
+              Delete
+         </button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noShops>
+    <div class="glass empty-state-wrapper">
+
+        <div class="empty-state">
+          <div class="empty-icon">🏪</div>
+          <h2 class="empty-title">No shops yet</h2>
+          <p class="empty-description">
+            Create your first shop to start selling your products online
+          </p>
+          <button routerLink="/shops/create" class="btn btn-primary">
+            <span class="btn-icon">+</span>
+            Create Your First Shop
+          </button>
+        </div>
+
+    </div>
+  </ng-template>
+</div>

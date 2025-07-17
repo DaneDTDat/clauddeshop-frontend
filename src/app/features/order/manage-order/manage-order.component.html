@@ -1,0 +1,67 @@
+<div class="container">
+  <h1 class="page-title">Manage Orders</h1>
+
+  <div class="glass-section">
+    <!-- Search and Filter Controls -->
+    <div class="controls-container">
+      <div class="form-group search-bar">
+        <label for="search">Search Orders</label>
+        <input
+          type="text"
+          id="search"
+          placeholder="Search by Order ID or Customer..."
+          [(ngModel)]="searchTerm"
+          (input)="applyFilters()"
+        />
+      </div>
+      <div class="form-group filter-status">
+        <label for="status">Filter by Status</label>
+        <select id="status" [(ngModel)]="selectedStatus" (change)="applyFilters()">
+          <option value="">All Statuses</option>
+          <option *ngFor="let status of orderStatusValues" [value]="status">{{ status }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="table-container">
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Total Price</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="isLoading">
+            <td colspan="6" class="loading-state">
+              <div class="spinner"></div>
+              <p>Loading orders...</p>
+            </td>
+          </tr>
+          <tr *ngIf="!isLoading && filteredOrders.length === 0">
+            <td colspan="6" class="empty-state">No orders found.</td>
+          </tr>
+          <tr *ngFor="let order of filteredOrders">
+            <td><a style="text-decoration: none;" [routerLink]="['/orders', order.id]">#{{ order.id }}</a></td>
+            <td>{{ order.user?.email || 'N/A' }}</td>
+            <td>{{ order.created_at | date:'medium' }}</td>
+            <td>{{ order.total | currency:'USD' }}</td>
+            <td>
+              <span class="status-badge" [ngClass]="'status-' + order.status.toLowerCase().replace(' ', '-')">{{ order.status }}</span>
+            </td>
+            <td>
+              <a [routerLink]="['/orders/update-status', order.id]" class="btn btn-primary">
+                Update Status
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,228 @@
+:host {
+  --primary: #d180ac;
+  --primary-light: rgba(209, 128, 172, 0.1);
+  --primary-dark: #b86b95;
+  --background: #f0f4f8;
+  --text-primary: #2c3e50;
+  --text-secondary: #7f8c8d;
+  --glass-bg: rgba(255, 255, 255, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --shadow: rgba(44, 62, 80, 0.1);
+  --border-color: #e0e6ed;
+  --success: #27ae60;
+  --warning: #f39c12;
+  --error: #c0392b;
+  --info: #3498db;
+  --processing: #8e44ad;
+  --shipped: #16a085;
+}
+
+.container {
+  padding: 2rem;
+  background-color: var(--background);
+}
+
+.page-header {
+  margin-bottom: 2rem;
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .page-subtitle {
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+  }
+}
+
+.glass-section {
+  padding: 2rem;
+  border-radius: 16px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 12px var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+
+.search-bar {
+  flex-grow: 1;
+  max-width: 400px;
+  input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+    background-color: var(--primary-light);
+    color: var(--text-primary);
+    &:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+  }
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  select {
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+    background-color: var(--primary-light);
+    color: var(--text-primary);
+  }
+  .btn-clear {
+    background-color: transparent;
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    &:hover {
+      background-color: var(--primary-light);
+    }
+  }
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  th, td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  th {
+    color: var(--primary);
+    font-weight: 600;
+  }
+  td {
+    color: var(--text-secondary);
+  }
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-weight: 600;
+  color: white;
+  text-transform: capitalize;
+  &.status-active { background-color: var(--success); }
+  &.status-inactive { background-color: var(--error); }
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  .results-info {
+    color: var(--text-secondary);
+  }
+  .buttons button {
+    background-color: var(--primary-light);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    &:hover:not(:disabled) {
+      background-color: var(--primary);
+      color: white;
+    }
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
+}
+
+.state-container {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-secondary);
+}
+
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+
+  .no-data-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .page-header .page-title {
+    font-size: 2rem;
+  }
+
+  .glass-section {
+    padding: 1.5rem;
+  }
+
+  .users-table {
+    font-size: 0.8rem;
+
+    th, td {
+      padding: 0.75rem 0.5rem;
+    }
+
+    .user-name {
+      flex-direction: column;
+      gap: 0.5rem;
+      text-align: center;
+
+      .user-avatar {
+        width: 35px;
+        height: 35px;
+        font-size: 0.8rem;
+      }
+    }
+
+    .actions {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+  }
+
+  .pagination-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .modal-content {
+    margin: 1rem;
+    width: calc(100% - 2rem);
+  }
+}

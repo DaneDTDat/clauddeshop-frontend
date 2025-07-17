@@ -1,0 +1,88 @@
+<div class="profile-container">
+  <div *ngIf="isLoading" class="spinner-container">
+    <div class="spinner" role="status"></div>
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="error-message-box">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="product && !isLoading && isOwner">
+    <div class="page-header">
+      <h1 class="page-title">Edit Product</h1>
+      <p class="page-subtitle">Update the details for {{ product.name }}.</p>
+    </div>
+    <div class="glass">
+      <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="profile-form">
+        <div class="form-group">
+          <label for="name" class="form-label">Product Name</label>
+          <input type="text" id="name" formControlName="name" class="form-input">
+          <div *ngIf="f['name'].touched && f['name'].errors" class="error-message">
+            <div *ngIf="f['name'].errors['required']">Product name is required.</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="category" class="form-label">Category</label>
+          <input type="text" id="category" formControlName="category" class="form-input">
+          <div *ngIf="f['category'].touched && f['category'].errors" class="error-message">
+            <div *ngIf="f['category'].errors['required']">Category is required.</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="price" class="form-label">Price</label>
+          <input type="number" id="price" formControlName="price" class="form-input">
+          <div *ngIf="f['price'].touched && f['price'].errors" class="error-message">
+            <div *ngIf="f['price'].errors['required']">Price is required.</div>
+            <div *ngIf="f['price'].errors['min']">Price must be a positive number.</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="stock" class="form-label">Stock</label>
+          <input type="number" id="stock" formControlName="stock" class="form-input">
+          <div *ngIf="f['stock'].touched && f['stock'].errors" class="error-message">
+            <div *ngIf="f['stock'].errors['required']">Stock quantity is required.</div>
+            <div *ngIf="f['stock'].errors['min']">Stock must be a positive number.</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="flex items-center space-x-4">
+            <mat-label>Image</mat-label>
+            <div class="item-image">
+              <img [src]="product.image_url | fullImageUrl" alt="Product Image" class="w-16 h-16 object-cover rounded-md">
+            </div>
+            <input hidden matInput formControlName="image_url" readonly placeholder="Upload an image">
+            <button type="button" mat-stroked-button (click)="fileInput.click()">Choose File</button>
+            <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept="image/*">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="status" class="form-label">Status</label>
+          <select id="status" formControlName="status" class="form-select">
+            <option *ngFor="let status of productStatuses" [value]="status">{{ status | titlecase }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="description" class="form-label">Description</label>
+          <textarea id="description" formControlName="description" class="form-input" rows="3"></textarea>
+        </div>
+
+        <div *ngIf="errorMessage" class="error-message-box">
+          {{ errorMessage }}
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="submit-btn" [disabled]="productForm.invalid || isLoading">
+            <span *ngIf="isLoading" class="spinner"></span>
+            {{ isLoading ? 'Saving...' : 'Save Changes' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

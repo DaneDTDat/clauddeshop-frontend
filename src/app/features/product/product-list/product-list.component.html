@@ -1,0 +1,120 @@
+<div class="product-list-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Products</h1>
+      <p class="page-subtitle">Manage your product catalog</p>
+    </div>
+    <div class="header-actions">
+      <button routerLink="/products/create" class="btn btn-primary glass-button">
+        <span class="btn-icon">+</span>
+        Add Product
+      </button>
+    </div>
+  </div>
+
+  <div class="filters-section glass">
+    <div class="filters-content">
+      <div class="search-box">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"
+          placeholder="Search products..."
+          class="search-input glass-input"
+        />
+        <span class="search-icon">🔍</span>
+      </div>
+      
+      <div class="filter-group">
+        <select [(ngModel)]="selectedCategory" (change)="onFilterChange()" class="filter-select glass-input">
+          <option value="">All Categories</option>
+          <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <select [(ngModel)]="selectedStatus" (change)="onFilterChange()" class="filter-select glass-input">
+          <option value="">All Status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+          <option value="out_of_stock">Out of Stock</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="products-grid" *ngIf="filteredProducts.length > 0; else noProducts">
+    <div *ngFor="let product of filteredProducts; trackBy: trackByProduct" class="product-card glass">
+      <div class="product-image">
+        <img [src]="product.image_url | fullImageUrl" 
+             [alt]="product.name" class="product-img">
+        <div class="product-status">
+          <span class="status-badge" [class]="'status-' + product.status">
+            {{ product.status }}
+          </span>
+        </div>
+      </div>
+
+      <div class="product-content">
+        <div class="product-header">
+          <h3 class="product-name">{{ product.name }}</h3>
+          <span class="product-price">${{ product.price }}</span>
+        </div>
+        
+        <p class="product-description">{{ product.description }}</p>
+        
+        <div class="product-meta">
+          <span class="product-category">{{ product.category }}</span>
+          <span class="product-stock" [class.low-stock]="product.stock < 10">
+            {{ product.stock }} in stock
+          </span>
+        </div>
+
+        <div class="product-stats">
+          <div class="stat-item">
+            <span class="stat-icon">📊</span>
+            <span class="stat-value">{{  0 }}</span>
+            <span class="stat-label">Views</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-icon">🛒</span>
+            <span class="stat-value">{{ 0 }}</span>
+            <span class="stat-label">Orders</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-icon">⭐</span>
+            <span class="stat-value">{{ 0 }}</span>
+            <span class="stat-label">Rating</span>
+          </div>
+        </div>
+
+        <div class="product-actions">
+          <button [routerLink]="['/products', product.id]" class="btn btn-sm btn-outline  ">
+            <span class="btn-icon">👁️</span> View
+          </button>
+          <button [routerLink]="['/products', product.id, 'edit']" class="btn btn-sm btn-outline">
+            <span class="btn-icon">✏️</span> Edit
+          </button>
+          <button (click)="deleteProduct(product)" class="btn btn-sm btn-outline">
+            <span class="btn-icon">🗑️</span> Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noProducts>
+    <div class="empty-state glass">
+      <div class="empty-icon">📦</div>
+      <h2 class="empty-title">No Products Found</h2>
+      <p class="empty-description">
+        It looks like there are no products matching your current filters. 
+        Try adjusting your search or add a new product!
+      </p>
+      <button routerLink="/products/create" class="btn btn-primary">
+        <span class="btn-icon">+</span>
+        Add Your First Product
+      </button>
+    </div>
+  </ng-template>
+</div>
