@@ -11,6 +11,6 @@ const getApiUrl = () => {
 
 export const environment = {
   production: false,
-  apiUrl: `https://clauddeshop-backend-production.up.railway.app/0/api`,
-  baseUrl: `https://clauddeshop-backend-production.up.railway.app/`,
+  apiUrl: `https://clauddeshop-backend-production.up.railway.app/api`,
+  baseUrl: `https://clauddeshop-backend-production.up.railway.app`,
 };
